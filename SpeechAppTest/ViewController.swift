@@ -11,8 +11,10 @@ import Speech
 
 class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 
+    @IBOutlet weak var guestList: UITextView!
     @IBOutlet weak var upperScreenView: UIView!
     
+    @IBOutlet weak var textToUser: UITextView!
     @IBOutlet weak var textView: UITextView!
     
     @IBOutlet weak var microphoneButton: UIButton!
@@ -34,7 +36,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
-    }
+        }
     
     let audioSession = AVAudioSession.sharedInstance()
         do {
@@ -62,7 +64,6 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
             var isFinal = false
     
             if result != nil {
-        
                 self.textView.text = result?.bestTranscription.formattedString
                 isFinal = (result?.isFinal)!
             }
@@ -75,6 +76,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
                 self.recognitionTask = nil
     
                 self.microphoneButton.isEnabled = true
+                self.textToUser.isHidden = true
             }
         })
     
@@ -91,7 +93,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
             print("audioEngine couldn't start because of an error.")
         }
     
-        textView.text = "Say something, I'm listening!"
+        textToUser.text = "Speak to enter name on guest list"
     
     }
     
@@ -119,7 +121,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             var isButtonEnabled = false
             
-            switch authStatus {  //5
+            switch authStatus {
             case .authorized:
                 isButtonEnabled = true
                 
@@ -142,8 +144,14 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         
         
         }
-        upperScreenView.backgroundColor = UIColorFromRGB(rgbValue: 0x00B3E6)
-        
+        view.backgroundColor = UIColorFromRGB(rgbValue: 0x00B3E6)
+        microphoneButton.layer.cornerRadius = 10
+        microphoneButton.layer.borderWidth = 1
+        microphoneButton.layer.borderColor = UIColor.white.cgColor
+        textView.backgroundColor = UIColorFromRGB(rgbValue: 0x00B3E6)
+        guestList.backgroundColor = UIColorFromRGB(rgbValue: 0x00B3E6)
+        textToUser.backgroundColor = UIColorFromRGB(rgbValue: 0x00B3E6)
+        //microphoneButton.backgroundColor = UIColor.gray
         // Do any additional setup after loading the view, typically from a nib.
     }
     
